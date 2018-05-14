@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Pulsar</string>
+
+    <string name="invalid_address">Invalid address</string>
+    <string name="invalid_amount">Invalid amount</string>
+    <string name="insufficient_funds">Insufficient funds</string>
+    <string name="attachment_too_long">Attachment is too long</string>
+    <string name="insufficient_fee">Transaction fee is too low.</string>
+    <string name="send_to_same_address_warning">Can\'t send to the same address.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string-array name="fee_array">
+        <item>Favelas</item>
+        <item>Nertia</item>
+        <item>UXSG</item>
+    </string-array>
+</resources>
