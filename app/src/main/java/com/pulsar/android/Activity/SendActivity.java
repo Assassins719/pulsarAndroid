@@ -48,9 +48,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidParameterSpecException;
 import java.util.HashMap;
 import java.util.Map;
 import com.pulsar.android.components.UltraPagerAdapter;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class SendActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler, AdapterView.OnItemSelectedListener {
@@ -66,13 +75,14 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
     long customFee = (long) 1000000;
     String strId = null;
     int nFeeType = 0, nCardType = 0;
-    String[] strCards = new String[]{"Favelas", "₦ertia", "UXSG"};
+    String[] strCards = new String[]{"Favelas", "Nertia", "UXSG"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_send);
+        strAddressTo = "3KhZCZkEc69Q2swU8TQNZSx862VWAUUukMA";
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -101,7 +111,42 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
         spinFee.setAdapter(adapter);
         spinFee.setOnItemSelectedListener(this);
     }
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                // Handle successful scan
+            } else if (resultCode == RESULT_CANCELED) {
+                // Handle cancel
+            }
+        }
+        if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                strAddressTo = intent.getStringExtra("address");
+                try {
+                    strAddressTo = GlobalVar.decryptMsg(strAddressTo);
+                } catch (NoSuchPaddingException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                } catch (InvalidParameterSpecException e) {
+                    e.printStackTrace();
+                } catch (InvalidAlgorithmParameterException e) {
+                    e.printStackTrace();
+                } catch (InvalidKeyException e) {
+                    e.printStackTrace();
+                } catch (BadPaddingException e) {
+                    e.printStackTrace();
+                } catch (IllegalBlockSizeException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                }
+                et_address.setText(strAddressTo);
+            }
+        }
+    }
 
     public void gotoQRScan(View view){
         Intent intent = new Intent(SendActivity.this, ScanQRActivity.class);
@@ -169,6 +214,7 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
                 "Processing Transcation...", true);
         TransferTransactionRequest tx = new TransferTransactionRequest(
                 GlobalVar.assetID[nCardType],
+                nFeeType,
                 GlobalVar.strPublic,
                 strAddressTo, amount, timestamp, customFee, strDesc);
         PrivateKeyAccount mTemp = PrivateKeyAccount.fromPrivateKey(GlobalVar.strPrivate, 'N');
@@ -183,11 +229,11 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("senderPublicKey", GlobalVar.strPublic);
-            jsonBody.put("assetId", GlobalVar.assetID);
+            jsonBody.put("assetId", GlobalVar.assetID[nCardType]);
             jsonBody.put("recipient", strAddressTo);
             jsonBody.put("amount", amount);
             jsonBody.put("fee", customFee);
-            jsonBody.put("feeAssetId", GlobalVar.assetID);
+            jsonBody.put("feeAssetId", GlobalVar.assetID[nFeeType]);
             jsonBody.put("timestamp", timestamp);
             jsonBody.put("attachment", tx.attachment);
             jsonBody.put("signature", strSignature);
@@ -235,20 +281,24 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Content-Type", "application/json");
+//                headers.put("Content-Type", "application/json");
                 return headers;
             }
 
-            @Override
-            public byte[] getBody() {
-                try {
-                    return requestBody == null ? null : requestBody.getBytes("utf-8");
-                } catch (UnsupportedEncodingException uee) {
-                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
-                            requestBody, "utf-8");
-                    return null;
-                }
-            }
+//            @Override
+//            public byte[] getBody() {
+//                try {
+//                    return requestBody == null ? null : requestBody.getBytes("utf-8");
+//                } catch (UnsupportedEncodingException uee) {
+//                    VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s",
+//                            requestBody, "utf-8");
+//                    return null;
+//                }
+//            }
+//            @Override
+//            public String getBodyContentType() {
+//                return "application/json";
+//            }
         };
         requestQueue.add(jsonObjectRequest);
     }
@@ -385,7 +435,7 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
                         tx_amount.setText("Amount: ₦");
                         break;
                     case 2:
-                        tx_amount.setText("Amount: ₦");
+                        tx_amount.setText("Amount: Ʉ");
                         break;
                 }
 

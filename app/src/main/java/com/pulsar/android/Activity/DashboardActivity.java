@@ -8,9 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -23,13 +20,13 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.pulsar.android.GlobalVar;
-import com.pulsar.android.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.pulsar.android.Adapter.ViewPagerAdapter;
 import com.pulsar.android.Fragment.HistoryAll;
 import com.pulsar.android.Fragment.HistoryToken;
+import com.pulsar.android.GlobalVar;
+import com.pulsar.android.Models.HistoryItem;
+import com.pulsar.android.R;
+
 import static android.graphics.Color.TRANSPARENT;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -37,6 +34,7 @@ public class DashboardActivity extends AppCompatActivity {
     ProgressDialog dialog;
     View v_dashboard, v_swap, v_history, v_more;
     RadioGroup rg_tabs;
+
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -47,17 +45,24 @@ public class DashboardActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         setContentView(R.layout.activity_dashboard);
         findviews();
-//        initView();
+        initView();
     }
 
     public void findviews(){
         v_dashboard = findViewById(R.id.view_dashboard);
         v_swap = findViewById(R.id.view_swap);
-        v_history = findViewById(R.id.view_history);
         v_more = findViewById(R.id.view_more);
+        v_history = findViewById(R.id.view_history);
         rg_tabs = findViewById(R.id.rg_tabs);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        for(int i=0;i<5;i++)
+        {
+            HistoryItem p=new HistoryItem("Afeaefaw"+i, "Eafewafwea"+i,"Eafewafwea"+i,"Eafewafwea"+i);
+            GlobalVar.mHistoryData.add(p);
+        }
+
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         setupViewPager(viewPager);
@@ -138,10 +143,10 @@ public class DashboardActivity extends AppCompatActivity {
         for (int y = 0; y < h; y++) {
             int offset = y * w;
             for (int x = 0; x < w; x++) {
-                pixels[offset + x] = result.get(x, y) ? TRANSPARENT: getResources().getColor(R.color.colorTabSelect);
+                pixels[offset + x] = result.get(x, y) ? TRANSPARENT: getResources().getColor(R.color.colorPrimary);
             }
         }
-        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_4444);
+        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
         bitmap.setPixels(pixels, 0, WIDTH, 0, 0, w, h);
         return bitmap;
     }
@@ -186,7 +191,8 @@ public class DashboardActivity extends AppCompatActivity {
 
     }
     public void gotoMoreSetting(View view){
-
+        Intent intent = new Intent(DashboardActivity.this, SettingActivity.class);
+        startActivity(intent);
     }
     public void gotoMoreContact(View view){
 
@@ -206,34 +212,7 @@ public class DashboardActivity extends AppCompatActivity {
     public void gotoHistorySend(View view){
 
     }
+
 }
 
 
-class ViewPagerAdapter extends FragmentPagerAdapter {
-    private final List<Fragment> mFragmentList = new ArrayList<>();
-    private final List<String> mFragmentTitleList = new ArrayList<>();
-
-    public ViewPagerAdapter(FragmentManager supportFragmentManager) {
-        super(supportFragmentManager);
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        return mFragmentList.get(position);
-    }
-
-    @Override
-    public int getCount() {
-        return mFragmentList.size();
-    }
-
-    public void addFragment(Fragment fragment, String title) {
-        mFragmentList.add(fragment);
-        mFragmentTitleList.add(title);
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return mFragmentTitleList.get(position);
-    }
-}

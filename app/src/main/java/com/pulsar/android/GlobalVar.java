@@ -4,6 +4,7 @@ import android.util.Base64;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.storage.StorageReference;
+import com.pulsar.android.Models.HistoryItem;
 import com.pulsar.android.auth.WavesWallet;
 
 import java.io.UnsupportedEncodingException;
@@ -12,6 +13,7 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.InvalidParameterSpecException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class GlobalVar {
     public static String strAddressEncrypted;
     public static String strPrivate;
     public static String strPublic;
+    public static ArrayList<HistoryItem> mHistoryData = new ArrayList<>();
 
     public static WavesWallet mWallet;
     public static final String KEY_INTENT_PASSWORD = "intent_password";
@@ -42,7 +45,7 @@ public class GlobalVar {
     public static final String KEY_INTENT_PUBLIC = "intent_public";
     public static final String KEY_INTENT_LOCAL = "0123456789ABCDEF";
     public static final String BASE_URL = "http://207.148.29.110:9069";
-    public static final String[] assetID = new String[]{"9aJNRabwrAhGQnUQ5dVg8B6JNZ65j2US936dm9wr91ZZ", "ESM3Lra8itkcBEiKW1otiqzQn4bw7QmtbycBFzEz5zGN", "5qm13UNbyyA3bZAfndJZUupvVWA4TGy1WCQKsuiAyDkF"};
+    public static final String[] assetID = new String[]{"9aJNRabwrAhGQnUQ5dVg8B6JNZ65j2US936dm9wr91ZZ", "waves", "ESM3Lra8itkcBEiKW1otiqzQn4bw7QmtbycBFzEz5zGN", "5qm13UNbyyA3bZAfndJZUupvVWA4TGy1WCQKsuiAyDkF"};
 
     public static StorageReference mStorageRef;
     public static DatabaseReference mDatabaseRef;

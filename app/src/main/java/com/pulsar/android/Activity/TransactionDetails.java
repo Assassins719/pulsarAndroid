@@ -66,7 +66,7 @@ public class TransactionDetails extends AppCompatActivity {
                 tx_amount.setText("Amount: ₦");
                 break;
             case 2:
-                tx_amount.setText("Amount: ₦");
+                tx_amount.setText("Amount: Ʉ");
                 break;
         }
         switch (nFeeType){
@@ -93,14 +93,16 @@ public class TransactionDetails extends AppCompatActivity {
         tx_time.setText(df.format(mDate));
     }
     public void gotoHistory(View view){
-
-    }
-    public void gotoBack(View view){
         Intent intent = new Intent(TransactionDetails.this, DashboardActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putInt("nPage",2);
         intent.putExtras(mBundle);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        this.finish();
+    }
+    public void gotoBack(View view){
+        Intent intent = new Intent(TransactionDetails.this, SendActivity.class);
+        startActivity(intent);
         this.finish();
     }
 }

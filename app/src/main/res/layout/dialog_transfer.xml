@@ -42,7 +42,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:visibility="invisible"
                 android:text="= 23.34 Reais Brasileiros"/>
             <TextView
                 android:id="@+id/tx_fee"

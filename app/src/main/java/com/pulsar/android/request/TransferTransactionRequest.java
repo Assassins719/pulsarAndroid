@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.common.base.Charsets;
 import com.google.common.primitives.Bytes;
 import com.google.common.primitives.Longs;
+import com.pulsar.android.GlobalVar;
 import com.pulsar.android.crypto.Base58;
 import com.pulsar.android.crypto.CryptoProvider;
 import com.pulsar.android.util.SignUtil;
@@ -20,16 +21,17 @@ public class TransferTransactionRequest {
     public String recipient;
     public long amount;
     public long timestamp;
-    public String feeAssetId;
+    public String feeAssetId = "";
     public long fee;
     public String attachment;
     public String signature;
 
     public transient final int txType = 4;
-    public TransferTransactionRequest(String assetId, String senderPublicKey, String recipient, long amount,
+    public TransferTransactionRequest(String assetId,int feeId, String senderPublicKey, String recipient, long amount,
                                       long timestamp, long fee, String attachment) {
         this.assetId = assetId;
-        this.feeAssetId = assetId;
+        if(feeId != 1)
+            this.feeAssetId = GlobalVar.assetID[feeId];
         this.senderPublicKey = senderPublicKey;
         this.recipient = recipient;
         this.amount = amount;

@@ -13,14 +13,21 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnQueryTextListener;
 
+import com.pulsar.android.Adapter.HistoryListAdapter;
+import com.pulsar.android.GlobalVar;
 import com.pulsar.android.R;
+import com.pulsar.android.components.UltraPagerAdapter;
 import com.tmall.ultraviewpager.UltraViewPager;
 import com.tmall.ultraviewpager.transformer.UltraScaleTransformer;
-import com.pulsar.android.components.UltraPagerAdapter;
 
 public class HistoryToken extends Fragment {
     UltraViewPager ultraViewPager;
+    ListView mListView;
+    SearchView sv_key;
 
     public HistoryToken() {
         // Required empty public constructor
@@ -43,6 +50,31 @@ public class HistoryToken extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         initSlider();
+        initList();
+    }
+    public void initList(){
+        mListView = getView().findViewById(R.id.list_view);
+        sv_key = getView().findViewById(R.id.search_view);
+        final HistoryListAdapter adapter=new HistoryListAdapter(getActivity(), GlobalVar.mHistoryData);
+        mListView.setAdapter(adapter);
+        sv_key.setOnQueryTextListener(new OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String arg0) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                // TODO Auto-generated method stub
+
+                adapter.getFilter().filter(query);
+
+                return false;
+            }
+        });
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)

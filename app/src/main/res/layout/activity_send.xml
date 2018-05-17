@@ -96,6 +96,7 @@
                         android:background="@android:color/transparent"
                         android:focusedByDefault="false"
                         android:hint="Enter Address of Alias"
+                        android:text="3KhZCZkEc69Q2swU8TQNZSx862VWAUUukMA"
                         android:inputType="text"
                         android:textAlignment="center"
                         android:textColor="#000"

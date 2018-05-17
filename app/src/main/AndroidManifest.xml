@@ -25,7 +25,11 @@
             android:name=".Activity.SplashActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Activity.InitActivity"
@@ -58,13 +62,10 @@
         <activity
             android:name=".Activity.DashboardActivity"
             android:configChanges="orientation"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
-            android:hardwareAccelerated="false">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:windowSoftInputMode="adjustPan">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".Activity.SendActivity"
@@ -74,6 +75,9 @@
         <activity android:name=".Activity.ScanQRActivity" />
         <activity android:name=".Activity.TransactionDetails" />
         <activity android:name=".Activity.ReceiveSuccess" />
+        <activity
+            android:name=".Activity.SettingActivity"
+            android:label="Settings"></activity>
     </application>
 
 </manifest>
