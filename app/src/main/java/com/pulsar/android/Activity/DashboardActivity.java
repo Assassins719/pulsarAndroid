@@ -10,12 +10,22 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
@@ -27,6 +37,14 @@ import com.pulsar.android.GlobalVar;
 import com.pulsar.android.Models.HistoryItem;
 import com.pulsar.android.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 import static android.graphics.Color.TRANSPARENT;
 
 public class DashboardActivity extends AppCompatActivity {
@@ -34,7 +52,8 @@ public class DashboardActivity extends AppCompatActivity {
     ProgressDialog dialog;
     View v_dashboard, v_swap, v_history, v_more;
     RadioGroup rg_tabs;
-
+    TextView tx_greeting;
+    int nPageIndex = 0;
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
@@ -44,6 +63,7 @@ public class DashboardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().hide();
         setContentView(R.layout.activity_dashboard);
+        nPageIndex = getIntent().getIntExtra("mPage",0);
         findviews();
         initView();
     }
@@ -55,14 +75,15 @@ public class DashboardActivity extends AppCompatActivity {
         v_history = findViewById(R.id.view_history);
         rg_tabs = findViewById(R.id.rg_tabs);
 
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        for(int i=0;i<5;i++)
-        {
-            HistoryItem p=new HistoryItem("Afeaefaw"+i, "Eafewafwea"+i,"Eafewafwea"+i,"Eafewafwea"+i);
-            GlobalVar.mHistoryData.add(p);
+        tx_greeting = findViewById(R.id.tx_greeting);
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if(hour<12){
+            tx_greeting.setText("Good Morning!");
+        }else if (hour<18){
+            tx_greeting.setText("Good Afternoon!");
+        }else{
+            tx_greeting.setText("Good Evening!");
         }
-
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         setupViewPager(viewPager);
@@ -104,6 +125,47 @@ public class DashboardActivity extends AppCompatActivity {
         });
     }
 
+    private void getHistory(){
+        RequestQueue chckConfirmReque = Volley.newRequestQueue(this);
+        String url = GlobalVar.BASE_URL + "/transactions/address/" + GlobalVar.strAddress + "/limit/100";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,null,new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try{
+                            JSONArray mData = response.getJSONArray(0);
+                            GlobalVar.mHistoryData.clear();
+                            for(int i=0;i<mData.length();i++){
+                                JSONObject mItem = mData.getJSONObject(i);
+                                HistoryItem mTemp = new HistoryItem(
+                                        mItem.getString("recipient"),
+                                        mItem.getString("sender"),
+                                        mItem.getString("id"),
+                                        mItem.getString("assetId"),
+                                        mItem.getString("feeAsset"),
+                                        mItem.getString("attachment"),
+                                        mItem.getLong("timestamp"),
+                                        mItem.getLong("amount"),
+                                        mItem.getLong("fee")
+                                );
+                                GlobalVar.mHistoryData.add(mTemp);
+                            }
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        // Do something when error occurred
+                        Log.d("errr","err");
+
+                    }
+                }
+        );
+        chckConfirmReque.add(jsonArrayRequest);
+    }
+
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new HistoryToken(), "Token Transactions");
@@ -112,6 +174,7 @@ public class DashboardActivity extends AppCompatActivity {
     }
 
     public void initView() {
+        getHistory();
         dialog = ProgressDialog.show(DashboardActivity.this, "",
                 "Please wait...", true);
         new Thread(new Runnable() {
@@ -125,6 +188,34 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         }).start();
+
+        switch (nPageIndex){
+            case 0:
+                v_dashboard.setVisibility(View.VISIBLE);
+                v_swap.setVisibility(View.GONE);
+                v_history.setVisibility(View.GONE);
+                v_more.setVisibility(View.GONE);
+                break;
+            case 1:
+                v_dashboard.setVisibility(View.GONE);
+                v_swap.setVisibility(View.VISIBLE);
+                v_history.setVisibility(View.GONE);
+                v_more.setVisibility(View.GONE);
+                break;
+            case 2:
+                v_dashboard.setVisibility(View.GONE);
+                v_swap.setVisibility(View.GONE);
+                v_history.setVisibility(View.VISIBLE);
+                v_more.setVisibility(View.GONE);
+                break;
+            case 3:
+                v_dashboard.setVisibility(View.GONE);
+                v_swap.setVisibility(View.GONE);
+                v_history.setVisibility(View.GONE);
+                v_more.setVisibility(View.VISIBLE);
+                break;
+        }
+
     }
 
     Bitmap encodeAsBitmap(String str) throws WriterException {
@@ -149,6 +240,18 @@ public class DashboardActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.RGB_565);
         bitmap.setPixels(pixels, 0, WIDTH, 0, 0, w, h);
         return bitmap;
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        if(hour<12){
+            tx_greeting.setText("Good Morning!");
+        }else if (hour<18){
+            tx_greeting.setText("Good Afternoon!");
+        }else{
+            tx_greeting.setText("Good Evening!");
+        }
     }
 
     public void showDialog(Activity activity) {

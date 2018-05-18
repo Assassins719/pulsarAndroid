@@ -96,7 +96,7 @@
                         android:background="@android:color/transparent"
                         android:focusedByDefault="false"
                         android:hint="Enter Address of Alias"
-                        android:text="3KhZCZkEc69Q2swU8TQNZSx862VWAUUukMA"
+                        android:text="3KZuM35DfVjyyyzNqD3puFnYR21vbnatsuc"
                         android:inputType="text"
                         android:textAlignment="center"
                         android:textColor="#000"
@@ -264,7 +264,14 @@
                     android:textColor="#000"
                     android:textSize="16sp" />
             </LinearLayout>
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:textAlignment="center"
+                android:text="Atention"
+                android:textColor="#f00"
+                android:textSize="20dp"/>
             <TextView
                 android:id="@+id/tx_option"
                 android:layout_width="match_parent"
@@ -272,8 +279,8 @@
                 android:paddingBottom="20dp"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
-                android:paddingTop="20dp"
-                android:text="Atention: \n Sent transactions are NOT reversible" />
+                android:textAlignment="center"
+                android:text="Sent transactions are NOT reversible" />
 
             <Button
                 android:onClick="checkSend"

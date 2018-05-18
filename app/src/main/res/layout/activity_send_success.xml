@@ -25,12 +25,13 @@
             android:textSize="18dp" />
 
         <TextView
+            android:id="@+id/tx_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Transaction "
+            android:text="Transaction Complete!"
             android:textColor="#fff"
-            android:textSize="24dp" />
+            android:textSize="20dp" />
     </RelativeLayout>
 
     <ScrollView
@@ -57,7 +58,7 @@
                     android:layout_height="120dp"
                     android:src="@drawable/img_send"/>
                 <TextView
-                    android:id="@+id/tx_favelas"
+                    android:id="@+id/tx_top_favelas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
@@ -65,6 +66,7 @@
                     android:paddingRight="40dp"
                     android:textSize="20dp"
                     android:text="ajdfiojwaf"
+                    android:textStyle="bold|italic"
                     android:textColor="#000" />
 
                 <TextView
@@ -72,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:paddingRight="40dp"
+                    android:paddingRight="30dp"
                     android:text="= 23.34 United States Dollars"
                     android:textSize="18dp"
                     android:textColor="@color/color_more_bkg"
@@ -124,10 +126,12 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:visibility="gone"
                     android:background="@color/colorSpliter"></LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:padding="10dp">
 
                     <TextView
@@ -255,7 +259,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:paddingRight="10dp"
-                        android:text="To: "
+                        android:text="TX ID:"
                         android:textColor="#000"
                         android:textSize="16sp" />
 
@@ -379,6 +383,7 @@
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:paddingTop="20dp"
+                android:visibility="gone"
                 android:text="Atention: \n Sent transactions are NOT reversible" />
 
             <Button

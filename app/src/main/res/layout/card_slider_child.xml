@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:gravity="start"
             android:paddingLeft="20dp"
-            android:text="Netia"
+            android:text=""
             android:textAlignment="textStart"
             android:textColor="#ba0000"
             android:textSize="20dp" />
@@ -33,18 +33,17 @@
             android:id="@+id/tx_balance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="5dp"
             android:text="N 6876484.55648"
             android:textAlignment="center"
-            android:textColor="#ba0000"
+            android:textColor="#fff"
             android:textSize="20dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="30dp"
-            android:gravity="right"
+            android:gravity="center"
             android:text="Available Balance"
-            android:textColor="#ba0000" />
+            android:textColor="#fff" />
     </LinearLayout>
 </RelativeLayout>

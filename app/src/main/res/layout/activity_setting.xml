@@ -60,10 +60,10 @@
                     android:layout_alignParentRight="true" />
             </RelativeLayout>
             <LinearLayout
-                android:onClick="gotoWallet"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"></LinearLayout>
             <RelativeLayout
+                android:onClick="gotoWallet"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:padding="10dp"

@@ -167,6 +167,6 @@
             android:text="Send"
             android:textAllCaps="false"
             android:textColor="#fff"
-            android:textSize="7pt" />
+            android:textSize="8pt" />
     </LinearLayout>
 </RelativeLayout>

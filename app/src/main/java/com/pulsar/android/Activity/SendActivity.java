@@ -96,7 +96,7 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
 
     public void initView() {
         tx_option = findViewById(R.id.tx_option);
-        String strCrie = "<font color='red'>Attention: </font><font color='black'><br />Sent transactions are </font><font color='red'>NOT </font> <font color='black'>reversible.</font>";
+        String strCrie = "<font color='black'>Sent transactions are </font><font color='red'> <b>NOT</b> </font><font color='black'>reversible.</font>";
         tx_option.setText(Html.fromHtml(strCrie), TextView.BufferType.SPANNABLE);
 
         et_amount = findViewById(R.id.edt_amount);
@@ -164,6 +164,9 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
     public void checkSend(View view){
         strAddressTo = String.valueOf(et_address.getText());
         strDesc = String.valueOf(et_desc.getText());
+        if(strDesc.equals("")){
+            strDesc = "String";
+        }
         try {
             amount = (long) (Float.parseFloat(String.valueOf(et_amount.getText())) * 100000000);
         } catch (Exception e) {
@@ -187,8 +190,10 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
         TextView tx_type = dialog.findViewById(R.id.tx_type);
         TextView tx_amount = dialog.findViewById(R.id.tx_amount);
         TextView tx_fee = dialog.findViewById(R.id.tx_fee);
+        TextView tx_title = dialog.findViewById(R.id.tx_title);
+        tx_title.setText("Send " + strCards[nCardType] + "?");
         String strFavels = "<font color='red'>" + String.valueOf(et_amount.getText()) + "</font><font color='black'>" + strCards[nCardType] + "</font>";
-        tx_amount.setText(Html.fromHtml(strFavels), TextView.BufferType.SPANNABLE);
+        tx_type.setText(Html.fromHtml(strFavels), TextView.BufferType.SPANNABLE);
         String strfees = "<font color='black'>Fee</font><font color='red'> - 0.010000 </font><font color='black'>" +strCards[nFeeType]+"</font>";
         tx_fee.setText(Html.fromHtml(strfees), TextView.BufferType.SPANNABLE);
         btn_cancel.setOnClickListener(new View.OnClickListener() {
@@ -260,10 +265,10 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
                 mBundle.putString("receipient", strAddressTo);
                 mBundle.putString("id", strId);
                 mBundle.putLong("timestamp", nTimeStamp);
-                mBundle.putString("description", strDesc);
+                mBundle.putString("description", String.valueOf(et_desc.getText()));
                 mBundle.putBoolean("unconfirmed", false);
                 mBundle.putString("amount",String.valueOf(et_amount.getText()));
-                mBundle.putBoolean("isSend", true);
+                mBundle.putInt("isSend", 1);
                 mBundle.putInt("cardid", nCardType);
                 mBundle.putInt("feeid", nFeeType);
                 intent.putExtras(mBundle);
@@ -427,6 +432,8 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
                 // Check if this is the page you want.
                 Log.d("Page","changed" + position);
                 nCardType = position;
+                nFeeType = position;
+                spinFee.setSelection(nFeeType);
                 switch (position){
                     case 0:
                         tx_amount.setText("Amount: ƒ");

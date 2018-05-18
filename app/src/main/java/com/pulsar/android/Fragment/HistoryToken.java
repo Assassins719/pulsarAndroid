@@ -1,5 +1,6 @@
 package com.pulsar.android.Fragment;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,12 +14,16 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 
+import com.pulsar.android.Activity.SendActivity;
+import com.pulsar.android.Activity.TransactionDetails;
 import com.pulsar.android.Adapter.HistoryListAdapter;
 import com.pulsar.android.GlobalVar;
+import com.pulsar.android.Models.HistoryItem;
 import com.pulsar.android.R;
 import com.pulsar.android.components.UltraPagerAdapter;
 import com.tmall.ultraviewpager.UltraViewPager;
@@ -57,6 +62,26 @@ public class HistoryToken extends Fragment {
         sv_key = getView().findViewById(R.id.search_view);
         final HistoryListAdapter adapter=new HistoryListAdapter(getActivity(), GlobalVar.mHistoryData);
         mListView.setAdapter(adapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                HistoryItem mItem = adapter.getItem(position);
+                Intent intent = new Intent(getActivity(), TransactionDetails.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putString("receipient", mItem.getStrReceipt());
+                mBundle.putString("id", mItem.getStrId());
+                mBundle.putLong("timestamp", mItem.getnTime());
+                mBundle.putString("description", mItem.getStrDesc());
+                mBundle.putBoolean("unconfirmed", false);
+                mBundle.putString("amount",mItem.getStrAmount());
+                mBundle.putInt("isSend", mItem.getIsSender());
+                mBundle.putInt("cardid", mItem.getCardId());
+                mBundle.putInt("feeid", mItem.getFeeId());
+                intent.putExtras(mBundle);
+                startActivity(intent);
+            }
+        });
         sv_key.setOnQueryTextListener(new OnQueryTextListener() {
 
             @Override
@@ -68,9 +93,7 @@ public class HistoryToken extends Fragment {
             @Override
             public boolean onQueryTextChange(String query) {
                 // TODO Auto-generated method stub
-
                 adapter.getFilter().filter(query);
-
                 return false;
             }
         });

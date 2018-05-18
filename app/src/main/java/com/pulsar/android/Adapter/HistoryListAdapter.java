@@ -1,10 +1,12 @@
 package com.pulsar.android.Adapter;
 
 import android.content.Context;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -12,6 +14,8 @@ import android.widget.TextView;
 import com.pulsar.android.Models.HistoryItem;
 import com.pulsar.android.R;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class HistoryListAdapter extends BaseAdapter implements Filterable {
@@ -20,7 +24,7 @@ public class HistoryListAdapter extends BaseAdapter implements Filterable {
     ArrayList<HistoryItem> mData;
     CustomFilter filter;
     ArrayList<HistoryItem> filterList;
-
+    String []strFees = {"ƒ", "₦","Ʉ"};
     public HistoryListAdapter(Context ctx,ArrayList<HistoryItem> mData) {
         // TODO Auto-generated constructor stub
         this.c=ctx;
@@ -35,7 +39,7 @@ public class HistoryListAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public Object getItem(int pos) {
+    public HistoryItem getItem(int pos) {
         // TODO Auto-generated method stub
         return mData.get(pos);
     }
@@ -59,15 +63,24 @@ public class HistoryListAdapter extends BaseAdapter implements Filterable {
 
         TextView tx_date=(TextView) convertView.findViewById(R.id.tx_date);
         TextView tx_amount=(TextView) convertView.findViewById(R.id.tx_amount);
-        TextView tx_id=(TextView) convertView.findViewById(R.id.tx_id);
+        EditText edit_id=(EditText) convertView.findViewById(R.id.tx_id);
         TextView tx_usd=(TextView) convertView.findViewById(R.id.tx_amount_usd);
 
 
         //SET DATA TO THEM
-        tx_date.setText(mData.get(pos).getDate());
-        tx_amount.setText(mData.get(pos).getStrAmount());
-        tx_id.setText(mData.get(pos).getStrToken());
-        tx_usd.setText(mData.get(pos).getStrUsd());
+        long nTime = mData.get(pos).getnTime();
+        DateFormat df;
+        df = new SimpleDateFormat("MMMM dd,yyyy 'at' HH:mm");
+        tx_date.setText(df.format(nTime));
+        String strFavels = "";
+        if(mData.get(pos).getIsSender() == 3){
+            strFavels = "<font color='black'>" + strFees[mData.get(pos).getCardId()] + " </font><font color='green'>+ " + mData.get(pos).getStrAmount() + "</font> ";
+        }else{
+            strFavels = "<font color='black'>" + strFees[mData.get(pos).getCardId()] + " </font><font color='red'>- " + mData.get(pos).getStrAmount()+ "</font> ";
+        }
+        tx_amount.setText(Html.fromHtml(strFavels), TextView.BufferType.SPANNABLE);
+        edit_id.setText("From: " + mData.get(pos).getStrId());
+//        tx_usd.setText(mData.get(pos).getStrUsd());
 
         return convertView;
     }
@@ -103,7 +116,7 @@ public class HistoryListAdapter extends BaseAdapter implements Filterable {
                 //get specific items
                 for(int i=0;i<filterList.size();i++)
                 {
-                    if(filterList.get(i).getStrToken().toUpperCase().contains(constraint))
+                    if(filterList.get(i).getStrId().toUpperCase().contains(constraint))
                     {
                         filters.add(filterList.get(i));
                     }

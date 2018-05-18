@@ -21,17 +21,17 @@ public class TransferTransactionRequest {
     public String recipient;
     public long amount;
     public long timestamp;
-    public String feeAssetId = "";
+    public String feeAssetId = null;
     public long fee;
     public String attachment;
     public String signature;
 
     public transient final int txType = 4;
-    public TransferTransactionRequest(String assetId,int feeId, String senderPublicKey, String recipient, long amount,
+
+    public TransferTransactionRequest(String assetId, int feeId, String senderPublicKey, String recipient, long amount,
                                       long timestamp, long fee, String attachment) {
         this.assetId = assetId;
-        if(feeId != 1)
-            this.feeAssetId = GlobalVar.assetID[feeId];
+        this.feeAssetId = GlobalVar.assetID[feeId];
         this.senderPublicKey = senderPublicKey;
         this.recipient = recipient;
         this.amount = amount;
@@ -42,13 +42,13 @@ public class TransferTransactionRequest {
 
     public byte[] toSignBytes() {
         try {
-            byte[] timestampBytes  = Longs.toByteArray(timestamp);
+            byte[] timestampBytes = Longs.toByteArray(timestamp);
             byte[] assetIdBytes = SignUtil.arrayOption(assetId);
-            byte[] amountBytes     = Longs.toByteArray(amount);
+            byte[] amountBytes = Longs.toByteArray(amount);
             byte[] feeAssetIdBytes = SignUtil.arrayOption(feeAssetId);
-            byte[] feeBytes        = Longs.toByteArray(fee);
+            byte[] feeBytes = Longs.toByteArray(fee);
 
-            return Bytes.concat(new byte[] {txType},
+            return Bytes.concat(new byte[]{txType},
                     Base58.decode(senderPublicKey),
                     assetIdBytes,
                     feeAssetIdBytes,
@@ -63,14 +63,16 @@ public class TransferTransactionRequest {
         }
     }
 
-    public void sign(byte[] privateKey)  {
+    public void sign(byte[] privateKey) {
         if (signature == null) {
             signature = Base58.encode(CryptoProvider.sign(privateKey, toSignBytes()));
         }
     }
-    public String getSignature(){
+
+    public String getSignature() {
         return signature;
     }
+
     public int getAttachmentSize() {
         if (attachment == null) {
             return 0;
