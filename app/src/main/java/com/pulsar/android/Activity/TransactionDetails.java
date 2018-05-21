@@ -114,19 +114,11 @@ public class TransactionDetails extends AppCompatActivity {
         tx_time.setText(df.format(mDate));
     }
     public void gotoHistory(View view){
-        Intent intent = new Intent(TransactionDetails.this, DashboardActivity.class);
-        Bundle mBundle = new Bundle();
-        mBundle.putInt("nPage",2);
-        intent.putExtras(mBundle);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        this.setResult(101);
         this.finish();
     }
     public void gotoBack(View view){
-        Intent intent = new Intent(TransactionDetails.this, DashboardActivity.class);
-        Bundle mBundle = new Bundle();
-        mBundle.putInt("nPage",2);
-        intent.putExtras(mBundle);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        this.setResult(101);
         this.finish();
     }
 }

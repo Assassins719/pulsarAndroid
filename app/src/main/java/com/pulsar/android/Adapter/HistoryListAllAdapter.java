@@ -19,15 +19,15 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-public class HistoryListAdapter extends BaseAdapter implements Filterable {
+public class HistoryListAllAdapter extends BaseAdapter implements Filterable {
 
     Context c;
     ArrayList<HistoryItem> mData = new ArrayList<>();
-    CustomFilter filter;
+    HistoryListAllAdapter.CustomFilter filter;
     ArrayList<HistoryItem> filterList = new ArrayList<>();
     String[] strFees = {"ƒ", "₦", "Ʉ"};
 
-    public HistoryListAdapter(Context ctx, ArrayList<HistoryItem> mData) {
+    public HistoryListAllAdapter(Context ctx, ArrayList<HistoryItem> mData) {
         // TODO Auto-generated constructor stub
         this.c = ctx;
         this.mData = new ArrayList<>(mData);
@@ -92,11 +92,11 @@ public class HistoryListAdapter extends BaseAdapter implements Filterable {
         tx_amount.setText(Html.fromHtml(strFavels), TextView.BufferType.SPANNABLE);
         edit_id.setText(mData.get(pos).getStrId());
 
-        if (mData.get(pos).getFirst()) {
-            lyt_header.setVisibility(View.VISIBLE);
-        } else {
+//        if (mData.get(pos).getFirst()) {
+//            lyt_header.setVisibility(View.VISIBLE);
+//        } else {
             lyt_header.setVisibility(View.GONE);
-        }
+//        }
         if (mData.get(pos).getUnconfirmed()) {
             tx_status.setText("UNCONFIRMED TRANSACTIONS");
         } else {
@@ -111,7 +111,7 @@ public class HistoryListAdapter extends BaseAdapter implements Filterable {
     public Filter getFilter() {
         // TODO Auto-generated method stub
         if (filter == null) {
-            filter = new CustomFilter();
+            filter = new HistoryListAllAdapter.CustomFilter();
         }
 
         return filter;

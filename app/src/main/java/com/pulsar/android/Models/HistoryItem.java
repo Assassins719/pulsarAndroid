@@ -13,7 +13,8 @@ public class HistoryItem {
     long nFee;
     long nAmount;
     String strDesc;
-    public HistoryItem(String strReceipt, String strSender, String strId, String strAsset, String strFee, String strDesc, long nTime, long nAmount, long nFee) {
+    boolean isUnconfirmed = false, isFirst = false;
+    public HistoryItem(String strReceipt, String strSender, String strId, String strAsset, String strFee, String strDesc, long nTime, long nAmount, long nFee, boolean isUnconfirmed) {
         this.strReceipt = strReceipt;
         this.strSender = strSender;
         this.strId = strId;
@@ -21,10 +22,11 @@ public class HistoryItem {
         this.strFeeAsset = strFee;
         this.strDesc = strDesc;
         this.nTime = nTime;
-        this.nAmount= nAmount;
+        this.nAmount = nAmount;
         this.nFee = nFee;
-
+        this.isUnconfirmed = isUnconfirmed;
     }
+
 
     public String getStrReceipt() {
         return strReceipt;
@@ -54,10 +56,10 @@ public class HistoryItem {
         return String.format("%.5f", (double)nFee/100000000);
     }
     public int getIsSender(){
-        if(strReceipt.equals(GlobalVar.strAddress)){
-            return 3;
-        }else{
+        if(strSender.equals(GlobalVar.strAddress)){
             return 2;
+        }else{
+            return 3;
         }
     }
     public int getCardId(){
@@ -74,6 +76,13 @@ public class HistoryItem {
         }
         return  0;
     }
-
-
+    public void setFirst(boolean isFirst){
+        this.isFirst= isFirst;
+    }
+    public boolean getFirst(){
+        return this.isFirst;
+    }
+    public boolean getUnconfirmed(){
+        return this.isUnconfirmed;
+    }
 }

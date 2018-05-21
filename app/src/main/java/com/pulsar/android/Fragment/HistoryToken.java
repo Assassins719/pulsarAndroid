@@ -29,10 +29,14 @@ import com.pulsar.android.components.UltraPagerAdapter;
 import com.tmall.ultraviewpager.UltraViewPager;
 import com.tmall.ultraviewpager.transformer.UltraScaleTransformer;
 
+import java.util.ArrayList;
+
 public class HistoryToken extends Fragment {
-    UltraViewPager ultraViewPager;
-    ListView mListView;
+    public UltraViewPager ultraViewPager;
+    public ListView mListView;
     SearchView sv_key;
+    public int nCardType = 0;
+    public HistoryListAdapter adapter;
 
     public HistoryToken() {
         // Required empty public constructor
@@ -57,10 +61,30 @@ public class HistoryToken extends Fragment {
         initSlider();
         initList();
     }
-    public void initList(){
+
+    public void initList() {
         mListView = getView().findViewById(R.id.list_view);
         sv_key = getView().findViewById(R.id.search_view);
-        final HistoryListAdapter adapter=new HistoryListAdapter(getActivity(), GlobalVar.mHistoryData);
+        ArrayList<HistoryItem> mTemp = new ArrayList<>();
+        boolean isFirst = true;
+        for (int i = 0; i < GlobalVar.mUnconfirmedData.size(); i++) {
+            if (GlobalVar.mUnconfirmedData.get(i).getStrAsset().equals(GlobalVar.assetID[nCardType])) {
+                HistoryItem mItem = GlobalVar.mUnconfirmedData.get(i);
+                mItem.setFirst(isFirst);
+                mTemp.add(mItem);
+                isFirst = false;
+            }
+        }
+        isFirst = true;
+        for (int i = 0; i < GlobalVar.mHistoryData.size(); i++) {
+            if (GlobalVar.mHistoryData.get(i).getStrAsset().equals(GlobalVar.assetID[nCardType])) {
+                HistoryItem mItem = GlobalVar.mHistoryData.get(i);
+                mItem.setFirst(isFirst);
+                mTemp.add(mItem);
+                isFirst = false;
+            }
+        }
+        adapter = new HistoryListAdapter(getActivity(), mTemp);
         mListView.setAdapter(adapter);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -74,7 +98,7 @@ public class HistoryToken extends Fragment {
                 mBundle.putLong("timestamp", mItem.getnTime());
                 mBundle.putString("description", mItem.getStrDesc());
                 mBundle.putBoolean("unconfirmed", false);
-                mBundle.putString("amount",mItem.getStrAmount());
+                mBundle.putString("amount", mItem.getStrAmount());
                 mBundle.putInt("isSend", mItem.getIsSender());
                 mBundle.putInt("cardid", mItem.getCardId());
                 mBundle.putInt("feeid", mItem.getFeeId());
@@ -97,11 +121,36 @@ public class HistoryToken extends Fragment {
                 return false;
             }
         });
+    }
 
+    public void updateList() {
+        if (adapter != null) {
+            ArrayList<HistoryItem> mTemp = new ArrayList<>();
+            boolean isFirst = true;
+            for (int i = 0; i < GlobalVar.mUnconfirmedData.size(); i++) {
+                if (GlobalVar.mHistoryData.get(i).getStrAsset().equals(GlobalVar.assetID[nCardType])) {
+                    HistoryItem mItem = GlobalVar.mUnconfirmedData.get(i);
+                    mItem.setFirst(isFirst);
+                    mTemp.add(mItem);
+                    isFirst = false;
+                }
+            }
+            isFirst = true;
+            for (int i = 0; i < GlobalVar.mHistoryData.size(); i++) {
+                if (GlobalVar.mHistoryData.get(i).getStrAsset().equals(GlobalVar.assetID[nCardType])) {
+                    HistoryItem mItem = GlobalVar.mHistoryData.get(i);
+                    mItem.setFirst(isFirst);
+                    mTemp.add(mItem);
+                    isFirst = false;
+                }
+            }
+            adapter.setData(mTemp);
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void initSlider(){
+    public void initSlider() {
         ultraViewPager = getView().findViewById(R.id.ultra_viewpager);
         ultraViewPager.setScrollMode(UltraViewPager.ScrollMode.HORIZONTAL);
         PagerAdapter adapter = new UltraPagerAdapter(true, getActivity());
@@ -121,12 +170,19 @@ public class HistoryToken extends Fragment {
         ultraViewPager.setAutoMeasureHeight(true);
         ultraViewPager.setPageTransformer(false, new UltraScaleTransformer());
         ultraViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            public void onPageScrollStateChanged(int state) {}
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
             public void onPageSelected(int position) {
                 // Check if this is the page you want.
-                Log.d("Page","changed" + position);
+                Log.d("Page", "changed" + position);
+                nCardType = position;
+                updateList();
             }
         });
+        ultraViewPager.setCurrentItem(nCardType);
     }
 }

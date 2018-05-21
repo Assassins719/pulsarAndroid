@@ -41,6 +41,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,6 +49,7 @@ import java.util.Map;
 import static android.graphics.Color.TRANSPARENT;
 
 public class DashboardActivity extends AppCompatActivity {
+    int TO_HISTORY = 101;
     Bitmap bmp_qr= null;
     ProgressDialog dialog;
     View v_dashboard, v_swap, v_history, v_more;
@@ -134,6 +136,7 @@ public class DashboardActivity extends AppCompatActivity {
                         try{
                             JSONArray mData = response.getJSONArray(0);
                             GlobalVar.mHistoryData.clear();
+                            GlobalVar.mHistoryDataAll.clear();
                             for(int i=0;i<mData.length();i++){
                                 JSONObject mItem = mData.getJSONObject(i);
                                 HistoryItem mTemp = new HistoryItem(
@@ -145,10 +148,14 @@ public class DashboardActivity extends AppCompatActivity {
                                         mItem.getString("attachment"),
                                         mItem.getLong("timestamp"),
                                         mItem.getLong("amount"),
-                                        mItem.getLong("fee")
+                                        mItem.getLong("fee"),
+                                        false
                                 );
                                 GlobalVar.mHistoryData.add(mTemp);
                             }
+                            GlobalVar.mHistoryDataAll = new ArrayList<>(GlobalVar.mHistoryData);
+                            mHistoryToken.updateList();
+                            mHistoryAll.updateList();
                         }catch (JSONException e){
                             e.printStackTrace();
                         }
@@ -165,16 +172,65 @@ public class DashboardActivity extends AppCompatActivity {
         );
         chckConfirmReque.add(jsonArrayRequest);
     }
+    public void getUnconfirm(){
+        RequestQueue chckConfirmReque = Volley.newRequestQueue(this);
+        String url = GlobalVar.BASE_URL + "/transactions/unconfirmed/";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET,url,null,new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                try{
+//                    JSONArray mData = response.getJSONArray(0);
+                    GlobalVar.mUnconfirmedData.clear();
+                    GlobalVar.mUnconfirmedDataAll.clear();
+                    for(int i=0;i<response.length();i++){
+                        JSONObject mItem = response.getJSONObject(i);
+                        HistoryItem mTemp = new HistoryItem(
+                                mItem.getString("recipient"),
+                                mItem.getString("sender"),
+                                mItem.getString("id"),
+                                mItem.getString("assetId"),
+                                mItem.getString("feeAsset"),
+                                mItem.getString("attachment"),
+                                mItem.getLong("timestamp"),
+                                mItem.getLong("amount"),
+                                mItem.getLong("fee"),
+                                true
+                        );
+                        if(mTemp.getStrSender().equals(GlobalVar.strAddress) || mTemp.getStrReceipt().equals(GlobalVar.strAddress)) {
+                            GlobalVar.mUnconfirmedData.add(mTemp);
+                        }
+                    }
+                    GlobalVar.mUnconfirmedDataAll = new ArrayList<>(GlobalVar.mUnconfirmedData);
+                    mHistoryToken.updateList();
+                    mHistoryAll.updateList();
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        },
+                new Response.ErrorListener(){
+                    @Override
+                    public void onErrorResponse(VolleyError error){
+                        // Do something when error occurred
+                        Log.d("errr","err");
 
+                    }
+                }
+        );
+        chckConfirmReque.add(jsonArrayRequest);
+    }
+    HistoryToken mHistoryToken = new HistoryToken();
+    HistoryAll mHistoryAll = new HistoryAll();
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HistoryToken(), "Token Transactions");
-        adapter.addFragment(new HistoryAll(), "All Transactions");
+        adapter.addFragment(mHistoryToken, "Token Transactions");
+        adapter.addFragment(mHistoryAll, "All Transactions");
         viewPager.setAdapter(adapter);
     }
 
     public void initView() {
         getHistory();
+        getUnconfirm();
         dialog = ProgressDialog.show(DashboardActivity.this, "",
                 "Please wait...", true);
         new Thread(new Runnable() {
@@ -188,7 +244,9 @@ public class DashboardActivity extends AppCompatActivity {
                 }
             }
         }).start();
+    }
 
+    public void showPage(){
         switch (nPageIndex){
             case 0:
                 v_dashboard.setVisibility(View.VISIBLE);
@@ -215,7 +273,6 @@ public class DashboardActivity extends AppCompatActivity {
                 v_more.setVisibility(View.VISIBLE);
                 break;
         }
-
     }
 
     Bitmap encodeAsBitmap(String str) throws WriterException {
@@ -279,8 +336,25 @@ public class DashboardActivity extends AppCompatActivity {
     public void gotoSendAcitivty(View view)
     {
         Intent intent = new Intent(DashboardActivity.this, SendActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, TO_HISTORY);
     }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TO_HISTORY) {
+            if (resultCode == TO_HISTORY) {
+                int nCard =data.getIntExtra("Card", 0);
+                mHistoryToken.nCardType = nCard;
+                if(mHistoryToken.ultraViewPager != null) {
+                    mHistoryToken.ultraViewPager.setCurrentItem(nCard);
+                }
+                getHistory();
+                getUnconfirm();
+                nPageIndex = 2;
+                showPage();
+            }
+        }
+    }
+
     public void otherWallets(View view){
 
     }

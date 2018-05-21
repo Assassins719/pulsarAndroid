@@ -37,6 +37,10 @@ public class GlobalVar {
     public static String strPrivate;
     public static String strPublic;
     public static ArrayList<HistoryItem> mHistoryData = new ArrayList<>();
+    public static ArrayList<HistoryItem> mUnconfirmedData = new ArrayList<>();
+
+    public static ArrayList<HistoryItem> mHistoryDataAll = new ArrayList<>();
+    public static ArrayList<HistoryItem> mUnconfirmedDataAll = new ArrayList<>();
 
     public static WavesWallet mWallet;
     public static final String KEY_INTENT_PASSWORD = "intent_password";

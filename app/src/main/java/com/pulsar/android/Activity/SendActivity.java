@@ -272,7 +272,10 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
                 mBundle.putInt("cardid", nCardType);
                 mBundle.putInt("feeid", nFeeType);
                 intent.putExtras(mBundle);
-                startActivity(intent);
+                startActivityForResult(intent, 101);
+                Intent _result = new Intent();
+                _result.putExtra("Card", nCardType);
+                SendActivity.this.setResult(101, _result);
                 SendActivity.this.finish();
             }
         }, new Response.ErrorListener() {
