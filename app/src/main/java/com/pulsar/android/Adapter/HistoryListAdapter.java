@@ -1,6 +1,7 @@
 package com.pulsar.android.Adapter;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,12 +86,13 @@ public class HistoryListAdapter extends BaseAdapter implements Filterable {
         if (mData.get(pos).getIsSender() == 3) {
             strFavels = "<font color='black'>" + strFees[mData.get(pos).getCardId()] + " </font><font color='green'>+ " + mData.get(pos).getStrAmount() + "</font> ";
             tx_from.setText("From: ");
+            edit_id.setText(mData.get(pos).getStrSender());
         } else {
             strFavels = "<font color='black'>" + strFees[mData.get(pos).getCardId()] + " </font><font color='red'>- " + mData.get(pos).getStrAmount() + "</font> ";
             tx_from.setText("To: ");
+            edit_id.setText(mData.get(pos).getStrReceipt());
         }
         tx_amount.setText(Html.fromHtml(strFavels), TextView.BufferType.SPANNABLE);
-        edit_id.setText(mData.get(pos).getStrId());
 
         if (mData.get(pos).getFirst()) {
             lyt_header.setVisibility(View.VISIBLE);

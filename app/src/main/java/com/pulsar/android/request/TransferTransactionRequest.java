@@ -37,7 +37,7 @@ public class TransferTransactionRequest {
         this.amount = amount;
         this.timestamp = timestamp;
         this.fee = fee;
-        this.attachment = attachment != null ? Base58.encode(attachment.getBytes(Charsets.UTF_8)) : null;
+        this.attachment = attachment;// != null ? Base58.encode(attachment.getBytes(Charsets.UTF_8)) : null;
     }
 
     public byte[] toSignBytes() {

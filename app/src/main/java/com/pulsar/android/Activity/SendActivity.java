@@ -192,7 +192,7 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
         TextView tx_fee = dialog.findViewById(R.id.tx_fee);
         TextView tx_title = dialog.findViewById(R.id.tx_title);
         tx_title.setText("Send " + strCards[nCardType] + "?");
-        String strFavels = "<font color='red'>" + String.valueOf(et_amount.getText()) + "</font><font color='black'>" + strCards[nCardType] + "</font>";
+        String strFavels = "<font color='red'>" + String.valueOf(et_amount.getText()) + "</font> <font color='black'>" + strCards[nCardType] + "</font>";
         tx_type.setText(Html.fromHtml(strFavels), TextView.BufferType.SPANNABLE);
         String strfees = "<font color='black'>Fee</font><font color='red'> - 0.010000 </font><font color='black'>" +strCards[nFeeType]+"</font>";
         tx_fee.setText(Html.fromHtml(strfees), TextView.BufferType.SPANNABLE);
@@ -210,7 +210,7 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
         });
         dialog.show();
     }
-
+    Intent intent;
     @SuppressLint("CheckResult")
     public void doTransfer() {
         dialog.dismiss();
@@ -260,23 +260,21 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Intent intent = new Intent(SendActivity.this, TransactionDetails.class);
+                intent = new Intent(SendActivity.this, TransactionDetails.class);
                 Bundle mBundle = new Bundle();
                 mBundle.putString("receipient", strAddressTo);
+                mBundle.putString("sender", GlobalVar.strAddress);
                 mBundle.putString("id", strId);
                 mBundle.putLong("timestamp", nTimeStamp);
-                mBundle.putString("description", String.valueOf(et_desc.getText()));
-                mBundle.putBoolean("unconfirmed", false);
+                mBundle.putString("description", tx.attachment);
+                mBundle.putBoolean("unconfirmed", true);
                 mBundle.putString("amount",String.valueOf(et_amount.getText()));
                 mBundle.putInt("isSend", 1);
                 mBundle.putInt("cardid", nCardType);
                 mBundle.putInt("feeid", nFeeType);
                 intent.putExtras(mBundle);
-                startActivityForResult(intent, 101);
-                Intent _result = new Intent();
-                _result.putExtra("Card", nCardType);
-                SendActivity.this.setResult(101, _result);
-                SendActivity.this.finish();
+                checkBalance();
+
             }
         }, new Response.ErrorListener() {
             @Override
@@ -321,16 +319,26 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
             public void onResponse(JSONObject response) {
                 try {
                     JSONArray mbalance = response.getJSONArray("balances");
-                    JSONObject mdata = mbalance .getJSONObject(0);
-                    String strBalance = mdata.getString("balance");
-                    balance = Long.parseLong(strBalance);
-                    double dBalance = (double)balance / 100000000;
-                    String strBa = String.format("%.3f", dBalance);
-                    SendActivity.this.tx_feavelas.setText(strBa);
+                    for(int j = 0; j < GlobalVar.assetID.length; j++) {
+                        for (int i = 0; i < mbalance.length(); i++) {
+                            JSONObject mdata = mbalance.getJSONObject(i);
+                            String strBalance = mdata.getString("balance");
+                            long balance = Long.parseLong(strBalance);
+                            double dBalance = (double) balance / 100000000;
+                            if(mdata.getString("assetId").equals(GlobalVar.assetID[j])){
+                                GlobalVar.balances[j] = dBalance;
+                            }
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 dialog.dismiss();
+                startActivityForResult(intent, 101);
+                Intent _result = new Intent();
+                _result.putExtra("Card", nCardType);
+                SendActivity.this.setResult(101, _result);
+                SendActivity.this.finish();
             }
         }, new Response.ErrorListener() {
             @Override

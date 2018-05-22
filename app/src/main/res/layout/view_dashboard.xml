@@ -69,12 +69,12 @@
                         android:paddingRight="30dp"
                         android:textSize="20dp"
                         android:textColor="#000"
-                        android:text="Total Wallet Balance:"/>
+                        android:text="Total Wallet Balance: 0.0"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:text="United States Dollars"/>
+                        android:text="$0.0 United States Dollars"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -86,24 +86,24 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/img_dash_1"/>
+                    android:src="@drawable/img_dash_2"/>
                 <TextView
                     android:id="@+id/tx_total_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="0dp"
                     android:paddingRight="10dp"
                     android:textSize="20dp"
                     android:text="6989"/>
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/img_dash_2"/>
+                    android:src="@drawable/img_dash_1"/>
                 <TextView
                     android:id="@+id/tx_total_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
+                    android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:textSize="20dp"
                     android:text="6989"/>
@@ -144,18 +144,22 @@
                             android:textAlignment="center"
                             android:text="Last transaction received"/>
                         <TextView
+                            android:id="@+id/tx_receive_last"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAlignment="center"
                             android:textColor="@color/colorGreen"
                             android:text="Received Favelas"/>
                         <TextView
+                            android:id="@+id/tx_receive_last_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textColor="#000"
+                            android:lines="1"
                             android:text="Nescal Dancy"/>
                         <TextView
+                            android:id="@+id/tx_receive_last_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
@@ -190,20 +194,24 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAlignment="center"
-                            android:text="Last transaction received"/>
+                            android:text="Last transaction sent"/>
                         <TextView
+                            android:id="@+id/tx_send_last"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAlignment="center"
                             android:textColor="@color/colorRed"
                             android:text="Sent Nertia"/>
                         <TextView
+                            android:id="@+id/tx_send_last_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:textColor="#000"
+                            android:lines="1"
                             android:text="Mr Goodcents #1014"/>
                         <TextView
+                            android:id="@+id/tx_send_last_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
@@ -306,6 +314,7 @@
                 android:weightSum="2"
                 android:orientation="horizontal">
                 <Button
+                    android:onClick="gotoDiscord"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -314,6 +323,7 @@
                     android:text="Discord App"
                     android:textColor="@color/colorPrimary"/>
                 <Button
+                    android:onClick="gotoInvite"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

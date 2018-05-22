@@ -29,7 +29,11 @@ public class HistoryItem {
 
 
     public String getStrReceipt() {
-        return strReceipt;
+//        if(getIsSender() == 3){
+//            return strSender;
+//        }else{
+            return strReceipt;
+//        }
     }
     public String getStrSender() {
         return strSender;
@@ -71,7 +75,7 @@ public class HistoryItem {
     }
     public int getFeeId(){
         for(int i =0; i < GlobalVar.assetID.length; i ++){
-            if(GlobalVar.assetID[i].equals(strAsset))
+            if(GlobalVar.assetID[i].equals(strFeeAsset))
                 return i;
         }
         return  0;
