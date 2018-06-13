@@ -34,11 +34,7 @@ public class UltraPagerAdapter extends PagerAdapter {
         return view == object;
     }
 
-    @Override
-    public int getItemPosition(Object object) {
-        RelativeLayout fragment = (RelativeLayout)object;
-        return (int)fragment.getTag();
-    }
+
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         RelativeLayout linearLayout = (RelativeLayout) LayoutInflater.from(container.getContext()).inflate(R.layout.card_slider_child, null);
@@ -67,9 +63,6 @@ public class UltraPagerAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-//        LinearLayout view = (LinearLayout) object;
-//        container.removeView(view);
-
         View view = (View)object;
         ((ViewPager) container).removeView(view);
         views.remove(position);

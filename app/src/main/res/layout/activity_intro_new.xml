@@ -52,7 +52,7 @@
                 android:gravity="center"
                 android:paddingBottom="20dp"
                 android:paddingTop="15dp"
-                android:text="Since only you control your account you will need to save your backup hrase in case the app is deleted"
+                android:text="Since only you control your account you will need to save your backup phrase in case the app is deleted"
                 android:textColor="#333"
                 android:textSize="18dp"
                 android:textStyle="italic" />
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:text="Your Account"
                 android:layout_marginBottom="5dp"
-                android:textSize="18dp"
+                android:textSize="14dp"
                 android:textColor="#000" />
 
             <com.pulsar.android.components.EditComponent.EditSpacebar

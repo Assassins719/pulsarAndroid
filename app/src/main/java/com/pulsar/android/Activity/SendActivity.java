@@ -76,7 +76,7 @@ public class SendActivity extends AppCompatActivity implements ZXingScannerView.
     String strId = null;
     int nFeeType = 0, nCardType = 0;
     String[] strCards = new String[]{"Favelas", "Nertia", "UXSG"};
-
+    //3KZuM35DfVjyyyzNqD3puFnYR21vbnatsuc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -289,14 +289,16 @@ public class DashboardActivity extends AppCompatActivity {
         tx_balance_1.setText(String.format("%.3f", GlobalVar.balances[0]));
         tx_balance_2.setText(String.format("%.3f", GlobalVar.balances[1]));
         tx_balance_3.setText(String.format("%.3f", GlobalVar.balances[2]));
-
-        tx_send_last.setText("Sent " + strCards[GlobalVar.mLastSend.getCardId()]);
-        tx_send_last_name.setText(GlobalVar.mLastSend.getStrReceipt());
-        tx_send_last_balance.setText("- " + strFees[GlobalVar.mLastSend.getCardId()] + " " + GlobalVar.mLastSend.getStrAmount() + " = 0.00 USD");
-
-        tx_receive_last.setText("Received " + strCards[GlobalVar.mLastReceive.getCardId()]);
-        tx_receive_last_name.setText(GlobalVar.mLastReceive.getStrSender());
-        tx_receive_last_balance.setText("+ " + strFees[GlobalVar.mLastReceive.getCardId()] + " " + GlobalVar.mLastReceive.getStrAmount() + " = 0.00 USD");
+        if (GlobalVar.mLastSend != null) {
+            tx_send_last.setText("Sent " + strCards[GlobalVar.mLastSend.getCardId()]);
+            tx_send_last_name.setText(GlobalVar.mLastSend.getStrReceipt());
+            tx_send_last_balance.setText("- " + strFees[GlobalVar.mLastSend.getCardId()] + " " + GlobalVar.mLastSend.getStrAmount() + " = 0.00 USD");
+        }
+        if(GlobalVar.mLastReceive != null) {
+            tx_receive_last.setText("Received " + strCards[GlobalVar.mLastReceive.getCardId()]);
+            tx_receive_last_name.setText(GlobalVar.mLastReceive.getStrSender());
+            tx_receive_last_balance.setText("+ " + strFees[GlobalVar.mLastReceive.getCardId()] + " " + GlobalVar.mLastReceive.getStrAmount() + " = 0.00 USD");
+        }
     }
 
     public void showPage() {

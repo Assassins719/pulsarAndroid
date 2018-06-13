@@ -96,7 +96,7 @@
                         android:background="@android:color/transparent"
                         android:focusedByDefault="false"
                         android:hint="Enter Address of Alias"
-                        android:text="3KZuM35DfVjyyyzNqD3puFnYR21vbnatsuc"
+                        android:text=""
                         android:inputType="text"
                         android:textAlignment="center"
                         android:textColor="#000"
@@ -269,7 +269,7 @@
                 android:layout_height="wrap_content"
                 android:paddingTop="20dp"
                 android:textAlignment="center"
-                android:text="Atention"
+                android:text="Attention"
                 android:textColor="#f00"
                 android:textSize="20dp"/>
             <TextView

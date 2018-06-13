@@ -50,8 +50,8 @@ public class GlobalVar {
     public static final String KEY_INTENT_PUBLIC = "intent_public";
     public static final String KEY_INTENT_LOCAL = "0123456789ABCDEF";
     public static final String BASE_URL = "http://207.148.29.110:9069";
-    public static final String[] assetID = new String[]{"9aJNRabwrAhGQnUQ5dVg8B6JNZ65j2US936dm9wr91ZZ", "HCbhRTNotKQ6KjZUdn2TiRDi3nhqwKKkea8gGDtEJS88", "ESM3Lra8itkcBEiKW1otiqzQn4bw7QmtbycBFzEz5zGN", "5qm13UNbyyA3bZAfndJZUupvVWA4TGy1WCQKsuiAyDkF"};
-    public static double[] balances = new double[3];
+    public static final String[] assetID = new String[]{"9aJNRabwrAhGQnUQ5dVg8B6JNZ65j2US936dm9wr91ZZ", "HCbhRTNotKQ6KjZUdn2TiRDi3nhqwKKkea8gGDtEJS88", "ESM3Lra8itkcBEiKW1otiqzQn4bw7QmtbycBFzEz5zGN"};//, "5qm13UNbyyA3bZAfndJZUupvVWA4TGy1WCQKsuiAyDkF"};
+    public static double[] balances = new double[]{0,0,0};
 
     public static StorageReference mStorageRef;
     public static DatabaseReference mDatabaseRef;

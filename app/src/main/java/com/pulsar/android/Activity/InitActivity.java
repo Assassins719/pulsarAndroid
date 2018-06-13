@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.pulsar.android.GlobalVar;
 import com.pulsar.android.R;
+import com.pulsar.android.auth.WalletManager;
+
+import java.util.Arrays;
 
 public class InitActivity extends AppCompatActivity {
     Button btn_new, btn_restore;
@@ -38,5 +42,7 @@ public class InitActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.fade_in,R.anim.fade_out);
             }
         });
+        GlobalVar.strSeeds = WalletManager.createWalletSeed(this);
+        GlobalVar.mSeeds = Arrays.asList(GlobalVar.strSeeds.split(" "));
     }
 }
